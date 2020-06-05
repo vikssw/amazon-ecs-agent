@@ -34,10 +34,6 @@ import (
 )
 
 const (
-	// defaultPublishMetricsInterval is the interval at which utilization
-	// metrics from stats engine are published to the backend.
-	defaultPublishMetricsInterval               = 20 * time.Second
-	defaultPublishInstanceHealthMetricsInterval = 1 * time.Minute
 	// The maximum time to wait between heartbeats without disconnecting
 	defaultHeartbeatTimeout = 1 * time.Minute
 	defaultHeartbeatJitter  = 1 * time.Minute
@@ -106,7 +102,7 @@ func startTelemetrySession(params *TelemetrySessionParams, statsEngine stats.Eng
 	url := formatURL(tcsEndpoint, params.Cfg.Cluster, params.ContainerInstanceArn, params.TaskEngine)
 	return startSession(params.Ctx, url, params.Cfg, params.CredentialProvider, statsEngine,
 		defaultHeartbeatTimeout, defaultHeartbeatJitter, config.DefaultContainerMetricsPublishInterval,
-		params.DeregisterInstanceEventStream)
+		config.DefaultInstanceHealthMetricsPublishInterval, params.DeregisterInstanceEventStream)
 }
 
 func startSession(

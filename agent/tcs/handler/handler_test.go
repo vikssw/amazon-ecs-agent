@@ -140,7 +140,8 @@ func TestStartSession(t *testing.T) {
 	// Start a session with the test server.
 	go startSession(ctx, server.URL, testCfg, testCreds, &mockStatsEngine{},
 		defaultHeartbeatTimeout, defaultHeartbeatJitter,
-		testPublishMetricsInterval, deregisterInstanceEventStream)
+		testPublishMetricsInterval, testPublishInstanceHealthMetricsInterval,
+		deregisterInstanceEventStream)
 
 	// startSession internally starts publishing metrics from the mockStatsEngine object.
 	time.Sleep(testPublishMetricsInterval)
@@ -204,7 +205,8 @@ func TestSessionConnectionClosedByRemote(t *testing.T) {
 	// Start a session with the test server.
 	err = startSession(ctx, server.URL, testCfg, testCreds, &mockStatsEngine{},
 		defaultHeartbeatTimeout, defaultHeartbeatJitter,
-		testPublishMetricsInterval, deregisterInstanceEventStream)
+		testPublishMetricsInterval, testPublishInstanceHealthMetricsInterval,
+		deregisterInstanceEventStream)
 
 	if err == nil {
 		t.Error("Expected io.EOF on closed connection")
@@ -241,7 +243,8 @@ func TestConnectionInactiveTimeout(t *testing.T) {
 	// Start a session with the test server.
 	err = startSession(ctx, server.URL, testCfg, testCreds, &mockStatsEngine{},
 		50*time.Millisecond, 100*time.Millisecond,
-		testPublishMetricsInterval, deregisterInstanceEventStream)
+		testPublishMetricsInterval, testPublishInstanceHealthMetricsInterval,
+		deregisterInstanceEventStream)
 	// if we are not blocked here, then the test pass as it will reconnect in StartSession
 	assert.NoError(t, err, "Close the connection should cause the tcs client return error")
 
